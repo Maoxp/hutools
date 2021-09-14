@@ -1,0 +1,29 @@
+{
+  "name": "maoxp/tool",
+  "description": "Common tools libraries",
+  "keywords": [
+    "psr",
+    "tools"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "maoxingpei",
+      "email": "maoxingpei8686@163.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Maoxp\\Tool\\": "src/"
+    },
+    "files": [
+      "src/functions.php"
+    ]
+  }
+}
