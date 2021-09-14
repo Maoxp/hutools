@@ -9,5 +9,5 @@ artifacts
 !artifacts/index.html
 tags
 
-.idea
+#.idea
 example.php
