@@ -1,10 +1,6 @@
 {
   "name": "maoxp/tool",
   "description": "Common tools libraries",
-  "keywords": [
-    "psr",
-    "tools"
-  ],
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -12,6 +8,11 @@
       "name": "maoxingpei",
       "email": "maoxingpei8686@163.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "keywords": [
+    "psr",
+    "tools"
   ],
   "require": {
     "php": ">=7.0.0",
