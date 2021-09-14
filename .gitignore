@@ -1,0 +1,13 @@
+vendor/
+node_modules/
+composer.lock
+npm-debug.log
+phpunit.xml
+phpcs.xml
+phpdox.xml
+artifacts
+!artifacts/index.html
+tags
+
+.idea
+example.php
