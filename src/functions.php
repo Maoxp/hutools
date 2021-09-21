@@ -1,4 +1,36 @@
 <?php
+
+/**
+ * 支持匿名函数序列化
+ *
+ * @param mixed $data
+ * @return string
+ */
+function serialize($data): string
+{
+    return \Opis\Closure\serialize($data);
+}
+
+/**
+ * 支持匿名函数反解析
+ *
+ * @example
+ * ```
+ * $fun = function te() {
+    echo "hello";
+ * }
+ * $res = serialize($fun);
+ * $fun2 = unSerialize($res);
+ * echo $fun2();
+ * ```
+ * @param string $serialize
+ * @return mixed
+ */
+function unSerialize(string $serialize)
+{
+    return \Opis\Closure\unserialize($serialize);
+}
+
 /**
  * 获取当前毫秒时间戳
  * @return float
@@ -41,7 +73,7 @@ function writeLog(string $content, string $dir, string $logFileName = "")
     }
 
     try {
-        chmod($dir, 0775);
+        @chmod($dir, 0775);
     } catch (\Exception $e) {
         throw new \RuntimeException("Failed to change permissions for directory \"$dir\": " . $e->getMessage(), $e->getCode());
     }
