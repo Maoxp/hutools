@@ -15,9 +15,10 @@
     "tools"
   ],
   "require": {
-    "php": ">=7.0.0",
+    "php": ">=7.1",
     "ext-curl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-openssl": "*"
   },
   "autoload": {
     "psr-4": {
