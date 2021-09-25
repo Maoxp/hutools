@@ -19,7 +19,9 @@
     "ext-curl": "*",
     "ext-json": "*",
     "ext-openssl": "*",
-    "opis/closure": "=3.6.2"
+    "opis/closure": "=3.6.2",
+    "ext-mbstring": "*",
+    "ext-simplexml": "*"
   },
   "autoload": {
     "psr-4": {
