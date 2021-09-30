@@ -6,7 +6,7 @@
  * @param mixed $data
  * @return string
  */
-function serialize($data): string
+function OpisClosureSerialize($data): string
 {
     return \Opis\Closure\serialize($data);
 }
@@ -14,31 +14,21 @@ function serialize($data): string
 /**
  * 支持匿名函数反解析
  *
+ * @param string $serialize
+ * @return mixed
  * @example
  * ```
  * $fun = function te() {
-    echo "hello";
+ * echo "hello";
  * }
  * $res = serialize($fun);
  * $fun2 = unSerialize($res);
  * echo $fun2();
  * ```
- * @param string $serialize
- * @return mixed
  */
-function unSerialize(string $serialize)
+function OpisClosureUnSerialize(string $serialize)
 {
     return \Opis\Closure\unserialize($serialize);
-}
-
-/**
- * 获取当前毫秒时间戳
- * @return float
- */
-function getMicrosecondOfNow(): float
-{
-    [$micro, $sec] = explode(" ", microtime());
-    return (float)sprintf("%.0f", ((float)$micro + (float)$sec) * 1000);
 }
 
 /**
@@ -52,7 +42,6 @@ function getMicrosecond(): float
 
 /**
  * 自定义写入日志
- *
  * @param string $content 日志内容
  * @param string $dir 写入地址(绝对地址)
  * @param string $logFileName 文件名
@@ -116,5 +105,114 @@ function writeLog(string $content, string $dir, string $logFileName = "")
         }
         flock($fp, LOCK_UN);
         fclose($fp);
+    }
+
+    /**
+     * 从阿拉伯数字+小写大写26字母(del:o|O)，获取指定长度随机字符串
+     * @param int $length
+     * @return string
+     */
+    function generatorString(int $length = 4): string
+    {
+        $char = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,q,r,s,t,u,v,w,x,y,z";
+        $charArray = explode(',', $char);
+        $charCount = count($charArray);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $charArray[rand(0, $charCount - 1)];
+        }
+        return $randomString;
+    }
+
+    /**
+     * 获取验证码图片
+     * @param string $randomString 需要显示的字符串
+     * @return false|string
+     */
+    function generatorCaptchaImg(string $randomString)
+    {
+        $length = strlen($randomString);
+        // 先定义图片的长、宽
+        $img_height = 75 + random_int(1, 3) * $length;
+        $img_width = 30;
+        // 新建一个真彩色图像, 背景黑色图像
+        $resourceImg = imagecreatetruecolor($img_height, $img_width);
+        // 文字颜色
+        $text_color = imagecolorallocate($resourceImg, 255, 255, 255);
+        for ($i = 0; $i < $length; $i++) {
+            $font = random_int(5, 6);
+            $x = $i * $img_height / $length + random_int(1, 3);
+            $y = random_int(1, 10);
+            // 写入字符
+            imagestring($resourceImg, $font, $x, $y, $randomString[$i], $text_color);
+        }
+        ob_start();
+        // 生成png格式
+        ImagePNG($resourceImg);
+        $data = ob_get_clean();
+        ImageDestroy($resourceImg);
+
+        return $data;
+    }
+
+    /**
+     *  字节数Byte转换为KB、MB、GB、TB
+     * @param int $num 字节长度 strlen()函数统计
+     * @return string
+     * @author  mxp
+     * 2018-7-16 10:22
+     */
+    function getFileSize($num)
+    {
+        $p = 0;
+        $format = 'bytes';
+        if ($num > 0 && $num < 1024) {
+            $p = 0;
+            return number_format($num) . ' ' . $format;
+        }
+        if ($num >= 1024 && $num < pow(1024, 2)) {
+            $p = 1;
+            $format = 'KB';
+        }
+        if ($num >= pow(1024, 2) && $num < pow(1024, 3)) {
+            $p = 2;
+            $format = 'MB';
+        }
+        if ($num >= pow(1024, 3) && $num < pow(1024, 4)) {
+            $p = 3;
+            $format = 'GB';
+        }
+        if ($num >= pow(1024, 4) && $num < pow(1024, 5)) {
+            $p = 3;
+            $format = 'TB';
+        }
+        $num /= pow(1024, $p);
+        return number_format($num, 3) . ' ' . $format;
+    }
+
+    function array2Xml($data)
+    {
+        if (is_object($data)) {
+            $data = get_object_vars($data);
+        }
+        $xml = '';
+        foreach ($data as $key => $val) {
+            if (is_null($val)) {
+                $xml .= "<$key/>\n";
+            } else {
+                if (!is_numeric($key)) {
+                    $xml .= "<$key>";
+                }
+                if (is_array($val) || is_object($val)) {
+                    $xml .= array2Xml($val);
+                } else {
+                    $xml .= $val;
+                }
+                if (!is_numeric($key)) {
+                    $xml .= "</$key>";
+                }
+            }
+        }
+        return $xml;
     }
 }
