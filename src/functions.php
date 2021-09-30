@@ -6,7 +6,7 @@
  * @param mixed $data
  * @return string
  */
-function OpisClosureSerialize($data): string
+function opisClosureSerialize($data): string
 {
     return \Opis\Closure\serialize($data);
 }
@@ -26,7 +26,7 @@ function OpisClosureSerialize($data): string
  * echo $fun2();
  * ```
  */
-function OpisClosureUnSerialize(string $serialize)
+function opisClosureUnSerialize(string $serialize)
 {
     return \Opis\Closure\unserialize($serialize);
 }
@@ -106,83 +106,84 @@ function writeLog(string $content, string $dir, string $logFileName = "")
         flock($fp, LOCK_UN);
         fclose($fp);
     }
+}
 
-    /**
-     * 从阿拉伯数字+小写大写26字母(del:o|O)，获取指定长度随机字符串
-     * @param int $length
-     * @return string
-     */
-    function generatorString(int $length = 4): string
-    {
-        $char = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,q,r,s,t,u,v,w,x,y,z";
-        $charArray = explode(',', $char);
-        $charCount = count($charArray);
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $charArray[rand(0, $charCount - 1)];
-        }
-        return $randomString;
+/**
+ * 从阿拉伯数字+小写大写26字母(del:o|O)，获取指定长度随机字符串
+ * @param int $length
+ * @return string
+ */
+function generatorString(int $length = 4): string
+{
+    $char = "0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F,G,H,I,J,K,L,M,N,P,Q,R,S,T,U,V,W,X,Y,Z,a,b,c,d,e,f,g,h,i,j,k,l,m,n,p,q,r,s,t,u,v,w,x,y,z";
+    $charArray = explode(',', $char);
+    $charCount = count($charArray);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $charArray[rand(0, $charCount - 1)];
     }
+    return $randomString;
+}
 
-    /**
-     * 获取验证码图片
-     * @param string $randomString 需要显示的字符串
-     * @return false|string
-     */
-    function generatorCaptchaImg(string $randomString)
-    {
-        $length = strlen($randomString);
-        // 先定义图片的长、宽
-        $img_height = 75 + random_int(1, 3) * $length;
-        $img_width = 30;
-        // 新建一个真彩色图像, 背景黑色图像
-        $resourceImg = imagecreatetruecolor($img_height, $img_width);
-        // 文字颜色
-        $text_color = imagecolorallocate($resourceImg, 255, 255, 255);
-        for ($i = 0; $i < $length; $i++) {
-            $font = random_int(5, 6);
-            $x = $i * $img_height / $length + random_int(1, 3);
-            $y = random_int(1, 10);
-            // 写入字符
-            imagestring($resourceImg, $font, $x, $y, $randomString[$i], $text_color);
-        }
-        ob_start();
-        // 生成png格式
-        ImagePNG($resourceImg);
-        $data = ob_get_clean();
-        ImageDestroy($resourceImg);
-
-        return $data;
+/**
+ * 获取验证码图片
+ * @param string $randomString 需要显示的字符串
+ * @return false|string
+ * @throws Exception
+ */
+function generatorCaptchaImg(string $randomString)
+{
+    $length = strlen($randomString);
+    // 先定义图片的长、宽
+    $img_height = 75 + random_int(1, 3) * $length;
+    $img_width = 30;
+    // 新建一个真彩色图像, 背景黑色图像
+    $resourceImg = imagecreatetruecolor($img_height, $img_width);
+    // 文字颜色
+    $text_color = imagecolorallocate($resourceImg, 255, 255, 255);
+    for ($i = 0; $i < $length; $i++) {
+        $font = random_int(5, 6);
+        $x = $i * $img_height / $length + random_int(1, 3);
+        $y = random_int(1, 10);
+        // 写入字符
+        imagestring($resourceImg, $font, $x, $y, $randomString[$i], $text_color);
     }
+    ob_start();
+    // 生成png格式
+    ImagePNG($resourceImg);
+    $data = ob_get_clean();
+    ImageDestroy($resourceImg);
 
-    /**
-     * 数组or对象转xml
-     * @param array|object $data
-     * @return string
-     */
-    function data2Xml($data): string
-    {
-        if (is_object($data)) {
-            $data = get_object_vars($data);
-        }
-        $xml = '';
-        foreach ($data as $key => $val) {
-            if (is_null($val)) {
-                $xml .= "<$key/>\n";
+    return $data;
+}
+
+/**
+ * 数组or对象转xml
+ * @param array|object $data
+ * @return string
+ */
+function data2Xml($data): string
+{
+    if (is_object($data)) {
+        $data = get_object_vars($data);
+    }
+    $xml = '';
+    foreach ($data as $key => $val) {
+        if (is_null($val)) {
+            $xml .= "<$key/>\n";
+        } else {
+            if (!is_numeric($key)) {
+                $xml .= "<$key>";
+            }
+            if (is_array($val) || is_object($val)) {
+                $xml .= data2Xml($val);
             } else {
-                if (!is_numeric($key)) {
-                    $xml .= "<$key>";
-                }
-                if (is_array($val) || is_object($val)) {
-                    $xml .= data2Xml($val);
-                } else {
-                    $xml .= $val;
-                }
-                if (!is_numeric($key)) {
-                    $xml .= "</$key>";
-                }
+                $xml .= $val;
+            }
+            if (!is_numeric($key)) {
+                $xml .= "</$key>";
             }
         }
-        return $xml;
     }
+    return $xml;
 }
