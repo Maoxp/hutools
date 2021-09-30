@@ -1,10 +1,4 @@
 .idea/*
-/vendor/
-nohup.out
+vendor/
 composer.lock
-
-phpunit.xml
-phpcs.xml
-phpdox.xml
-
-.DS_Stroe
+.DS_Store
