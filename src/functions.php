@@ -156,41 +156,11 @@ function writeLog(string $content, string $dir, string $logFileName = "")
     }
 
     /**
-     *  字节数Byte转换为KB、MB、GB、TB
-     * @param int $num 字节长度 strlen()函数统计
+     * 数组or对象转xml
+     * @param array|object $data
      * @return string
-     * @author  mxp
-     * 2018-7-16 10:22
      */
-    function getFileSize($num)
-    {
-        $p = 0;
-        $format = 'bytes';
-        if ($num > 0 && $num < 1024) {
-            $p = 0;
-            return number_format($num) . ' ' . $format;
-        }
-        if ($num >= 1024 && $num < pow(1024, 2)) {
-            $p = 1;
-            $format = 'KB';
-        }
-        if ($num >= pow(1024, 2) && $num < pow(1024, 3)) {
-            $p = 2;
-            $format = 'MB';
-        }
-        if ($num >= pow(1024, 3) && $num < pow(1024, 4)) {
-            $p = 3;
-            $format = 'GB';
-        }
-        if ($num >= pow(1024, 4) && $num < pow(1024, 5)) {
-            $p = 3;
-            $format = 'TB';
-        }
-        $num /= pow(1024, $p);
-        return number_format($num, 3) . ' ' . $format;
-    }
-
-    function array2Xml($data)
+    function data2Xml($data): string
     {
         if (is_object($data)) {
             $data = get_object_vars($data);
@@ -204,7 +174,7 @@ function writeLog(string $content, string $dir, string $logFileName = "")
                     $xml .= "<$key>";
                 }
                 if (is_array($val) || is_object($val)) {
-                    $xml .= array2Xml($val);
+                    $xml .= data2Xml($val);
                 } else {
                     $xml .= $val;
                 }
