@@ -1,13 +1,10 @@
-vendor/
-node_modules/
+.idea/*
+/vendor/
+nohup.out
 composer.lock
-npm-debug.log
+
 phpunit.xml
 phpcs.xml
 phpdox.xml
-artifacts
-!artifacts/index.html
-tags
 
-.idea
-example.php
+.DS_Stroe
