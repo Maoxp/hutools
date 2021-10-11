@@ -13,7 +13,6 @@ function opisClosureSerialize($data): string
 
 /**
  * 支持匿名函数反解析
- *
  * @param string $serialize
  * @return mixed
  * @example
