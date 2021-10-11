@@ -89,7 +89,7 @@ class CurlUtil
         }
 
         $postFields = $body;
-        if ($jsonRequest && is_array($body)) {
+        if ($jsonRequest) {
             $postFields = json_encode($body, JSON_UNESCAPED_UNICODE);
         }
         $url = str_replace(' ', '+', $url); //对空格进行转义
