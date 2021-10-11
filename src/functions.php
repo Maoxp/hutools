@@ -2,7 +2,6 @@
 
 /**
  * 支持匿名函数序列化
- *
  * @param mixed $data
  * @return string
  */
