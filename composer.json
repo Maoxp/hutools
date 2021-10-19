@@ -9,7 +9,7 @@
       "email": "maoxingpei8686@163.com"
     }
   ],
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "keywords": [
     "psr",
     "tools"
