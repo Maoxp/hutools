@@ -2,6 +2,7 @@
 
 /**
  * 支持匿名函数序列化
+ *
  * @param mixed $data
  * @return string
  */
@@ -26,7 +27,7 @@ function opisClosureSerialize($data): string
  */
 function opisClosureUnSerialize(string $serialize)
 {
-    return \Opis\Closure\unserialize($serialize);
+    return \Opis\Closure\unserialize($serialize, null);
 }
 
 /**
